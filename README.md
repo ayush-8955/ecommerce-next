@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# E-Commerce Backend System
 
-## Getting Started
+A production-style E-Commerce backend built using Next.js API Routes and PostgreSQL.  
+This project simulates the backend of an online shopping platform and focuses on database design, REST API development, transactional consistency, and automation using database triggers.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- User management (customers, admins)
+- Product and category management
+- Order placement with ACID-compliant transactions
+- Automatic inventory management using PostgreSQL triggers
+- Payment and review handling
+- Fully tested REST APIs using Postman
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tech Stack
 
-## Learn More
+- Backend: Next.js (App Router, API Routes)
+- Database: PostgreSQL
+- Database Client: pg
+- API Style: REST
+- Testing Tool: Postman
+- Language: JavaScript
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## System Overview
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project represents the backend logic of an e-commerce platform.
 
-## Deploy on Vercel
+Typical flow:
+1. Users are created
+2. Admin adds categories and products
+3. Users browse products
+4. Users place orders (handled via transactions)
+5. Inventory is automatically updated (via trigger)
+6. Payments and reviews are recorded
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Database Design
+
+The database follows Third Normal Form (3NF) and uses a custom schema.
+
+Tables:
+- users
+- categories
+- products
+- orders
+- order_items
+- payments
+- reviews
+
+The order_items table is used to properly model one-to-many relationships between orders and products.
+
+---
+
+## Transactions (ACID)
+
+Order placement is handled inside a PostgreSQL transaction to ensure:
+
+- Atomicity: The order is fully placed or fully rolled back
+- Consistency: The database remains in a valid state
+- Isolation: Concurrent orders do not interfere with each other
+- Durability: Data is permanently stored after commit
+
+---
+
+## Triggers
+
+A PostgreSQL trigger automatically updates product stock after an order is placed.
+
+Purpose:
+- Prevents manual stock management
+- Keeps business logic close to the database
+- Ensures inventory consistency
+
+---
+
+## API Endpoints
+
+### Users
+- GET /api/users
+- POST /api/users
+
+### Categories
+- GET /api/categories
+- POST /api/categories
+
+### Products
+- GET /api/products
+- POST /api/products
+
+### Orders
+- GET /api/orders
+- POST /api/orders (transactional)
+
+### Payments
+- GET /api/payments
+- POST /api/payments
+
+### Reviews
+- GET /api/reviews
+- POST /api/reviews
+
+---
+
+## API Testing
+
+All APIs were tested using Postman with realistic request flows:
+- User creation
+- Product listing
+- Order placement
+- Stock update verification
+- Payment and review insertion
